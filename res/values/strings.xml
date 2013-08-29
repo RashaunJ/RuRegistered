@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RURegistered</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_course_detail">CourseDetail</string>
+    <string name="course_list_header">Available Courses</string>
+    <string name="course_detail_name" />
+    <string name="course_detail_prereqs">Prerequisites:</string>
+    <string name="course_detail_prereq_full" />
+    <string name="section_expand_label">Available Sections</string>
+    <string name="course_detail_section_label">All Sections: (Press one for full info)</string>
+    <string name="title_activity_home">Tracker Home</string>
+    <string name="welcome">Welcome! First select your campus:</string>
+    <string name="welcome_major">Next select your major:</string>
+    <string name="welcome_term">Finally enter your term:</string>
+    <string name="welcome_alt">OR enter the major code if you know it</string>
+    <string name="welcome_submit">Submit</string>
+    <string name="empty">No Courses Found. Please Try Again</string>
+    <string name="track">Track Course</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_launcher">Launcher</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_tracked_list">TrackedList</string>
+    <string name="title_activity_track_list">TrackList</string>
+    <string name="title_activity_about">About</string>
+    <string name="about_version">RURegistered V1.0.0</string>
+    <string name="about_uses">Uses GSON parsing library, ActionBarSherlock.</string>
+    <string name="about_year">2013 RaShaun Jones</string>
+    <string name="about_question">Questions? Want to report an issue? Email raltcc@gmail.com</string>
+
+</resources>

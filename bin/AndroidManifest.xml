@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ruregistered"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+        <TextView
+            android:id="@+id/selection"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawSelectorOnTop="false" />
+    </LinearLayout>
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Sherlock.Light" >
+        <activity
+            android:name="com.rashaunj.ruregistered.List"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Sherlock.Light" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ruregistered.Home" >
+            </meta-data>
+        </activity>
+        <activity
+            android:name="com.rashaunj.ruregistered.CourseDetail"
+            android:label="@string/title_activity_course_detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Sherlock.Light" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ruregistered.List" >
+            </meta-data>
+        </activity>
+        <activity
+            android:name="com.rashaunj.ruregistered.TrackerHome"
+            android:label="@string/title_activity_home" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ruregistered.Launxhwe" >
+            </meta-data>
+        </activity>
+
+        <service android:name="com.rashaunj.ruregistered.Tracker" >
+        </service>
+
+        <activity
+            android:name="com.rashaunj.ruregistered.Launcher"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.rashaunj.ruregistered.TrackList"
+            android:label="@string/title_activity_track_list" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rashaunj.ruregistered.Launcher" >
+            </meta-data>
+        </activity>
+        <activity
+            android:name="com.example.ruregistered.About"
+            android:label="@string/title_activity_about" >
+             <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rashaunj.ruregistered.Launcher" >
+            </meta-data>
+        </activity>
+    </application>
+
+</manifest>
