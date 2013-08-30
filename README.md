@@ -1,4 +1,4 @@
-RuRegistered
+RURegistered
 ============
 
 RuRegistered is an Android application which allows for tracking of the open/close status of courses for Rutgers.
