@@ -8,12 +8,13 @@ RuRegistered uses JSON requests to parse relevant course information. Simple.
 
 ##Object Structure
 
-A list of course under a major are first parsed into a CourseList object.
+A list of courses under a major are first parsed into a CourseList object.
 
 CourseLists consists of Courses which themselves have relevant information such as Section arrays and Meeting Times.
 
 
-TrackedCourses differ mainly in the fact that they are used for tracking purposes and only hold ebough information to track the open/closed status.
+TrackedCourses differ mainly in the fact that they are used for tracking purposes and only hold enough information to track the open/closed status.
+At some point I may just track using regular Course objects in order to avoid confusion.
 
 In general the hierarchy is as follows:
 
