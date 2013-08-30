@@ -62,7 +62,7 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
             final EditText input = new EditText(this);
             alert.setView(input);
             alert.setTitle("Welcome");
-            alert.setMessage("This appears to be your first run. I'll need your email.");
+            alert.setMessage("This appears to be your first run. I'll need your email address.");
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String value = input.getText().toString().trim();

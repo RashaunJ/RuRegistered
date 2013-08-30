@@ -43,6 +43,7 @@ public class List extends SherlockActivity implements OnItemClickListener{
 public static ArrayList<Course> mcourse = new ArrayList<Course>();
 public ArrayList<String> Listing = new ArrayList<String>();
 CourseListAdapter adapter;
+Tracker push = new Tracker();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
    
@@ -130,7 +131,7 @@ CourseListAdapter adapter;
 			 						 String course = adapter.getItem(position).title;
 			 						for (int i = 0;i<allsections.length;i++){
 			 							 String section = allsections[i].index;
-			 						     writeAll(major,campus,term,level,course,section);
+			 						     write(major,campus,term,level,course,section);
 			 						     count++;
 			 						}
 			 					    CharSequence text = count + " sections added to Course Tracker";
@@ -178,8 +179,7 @@ CourseListAdapter adapter;
 		intent.putExtra("major",major);
 		intent.putExtra("term", term);
 		intent.putExtra("campus", campus);
-		intent.putExtra("course", course);
-		
+		intent.putExtra("course", course);		
 		startActivity(intent);
 	}
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -200,50 +200,34 @@ CourseListAdapter adapter;
 		LoadData task = new LoadData();
 		task.execute();
 	}
-    @SuppressLint("WorldReadableFiles")
-	public void writeAll(String major,String campus, String term, String level, String course, String section) {
-   	 
-	TrackedCourse in = new TrackedCourse(major,campus,term,course,section);
+	public void write(String major,String campus, String term, String level, String course, String section) {
+	   	 
+		TrackedCourse in = new TrackedCourse(major,campus,term,course,section);
 
-	Gson gson = new Gson();
-	JsonElement json = gson.toJsonTree(in);
-
- 
+		Gson gson = new Gson();
+		JsonElement json = gson.toJsonTree(in);
 
 
-try {
 
-    FileOutputStream fos = openFileOutput("tracker",
-            Context.MODE_APPEND | Context.MODE_WORLD_READABLE);
-    fos.write(json.toString().getBytes());
-    fos.close();
+		try {
+		 File file = new File(getFilesDir(), "RUTracker.json");
+		 String contextA=getApplicationContext().getFilesDir().getAbsolutePath();
+	     RandomAccessFile raf = new RandomAccessFile(new File(getApplicationContext().getFilesDir(),"RUtracker.json"), "rw");
+	      	if(raf.length()==0){
+	      		raf.writeBytes("["+json.toString()+"]");
+	      	}
+	      	else{
+	          	raf.setLength(file.length()-1);
+	          	raf.seek(file.length());
+	          	raf.writeBytes(","+json.toString()+"]");
+	      	}
+	     raf.close();
 
+	} catch (Exception e) {
 
-    String storageState = Environment.getExternalStorageState();
+	    e.printStackTrace();
 
-    if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-    	//Properly format json table
-      File file = new File(getExternalFilesDir(null), "RUTracker.json");
-      	RandomAccessFile raf = new RandomAccessFile(file,"rw");
-      	if(raf.length()==0){
-      		raf.writeBytes("["+json.toString()+"]");
-      	}
-      	else{
-          	raf.setLength(file.length()-1);
-          	raf.seek(file.length());
-          	raf.writeBytes(","+json.toString()+"]");
-      	}
-      	raf.close();
+	}
+		}
 
-
-    }
-
-} catch (Exception e) {
-
-    e.printStackTrace();
-
-}
-
-
-    }
 }

@@ -44,12 +44,12 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
 		setContentView(R.layout.activity_home);	
 		Calendar calender = Calendar.getInstance();
 	       calender.setTimeInMillis(System.currentTimeMillis());
-	       calender.add(Calendar.SECOND, 30);
+	       calender.add(Calendar.SECOND, 9000);
 	       Log.d("Testing", "Calender Set time:"+calender.getTime());
 			Intent intent = new Intent(TrackerHome.this, Tracker.class);
 			PendingIntent pintent = PendingIntent.getService(getBaseContext(), 0, intent, 0);
 			AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-			alarm.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 30*1000, pintent);		
+			alarm.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 9000*1000, pintent);		
 		Spinner campusspin = (Spinner) findViewById(R.id.campus);
 		final Spinner termspin = (Spinner) findViewById(R.id.term);
 		final Spinner majorspin = (Spinner) findViewById(R.id.majors);

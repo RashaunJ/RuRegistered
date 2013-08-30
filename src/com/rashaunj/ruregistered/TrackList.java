@@ -116,12 +116,15 @@ public class TrackList extends SherlockActivity {
 
 		@Override
 		protected Void doInBackground(Void... params) {
+			/*
 			try {
 				Tracker.create(list);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			*/
 			return null;
 		}
 	 }

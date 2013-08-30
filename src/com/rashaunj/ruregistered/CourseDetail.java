@@ -40,7 +40,7 @@ import android.widget.Toast;
 
 public class CourseDetail extends SherlockFragmentActivity {
 	Bundle i;
-	
+	 Tracker push = new Tracker();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -146,8 +146,14 @@ public class CourseDetail extends SherlockFragmentActivity {
 			 String level = "U";
 			 String course = i.getString("course");
 			 String section = in.index;
+
 		     write(major,campus,term,level,course,section);
-		     
+		     Context context = getApplicationContext();
+		     CharSequence text = "1 section added to Course Tracker";
+		     int duration = Toast.LENGTH_SHORT;
+
+		     Toast toast = Toast.makeText(context, text, duration);
+		     toast.show();
 		     helpDialog.cancel();
 		     
 		 }});
@@ -156,54 +162,59 @@ public class CourseDetail extends SherlockFragmentActivity {
 	
 
     @SuppressLint("WorldReadableFiles")
+    /**
+     * Writes selected course(s) to json.    	 
+     */
 	public void write(String major,String campus, String term, String level, String course, String section) {
-    	 
-	TrackedCourse in = new TrackedCourse(major,campus,term,course,section);
+	   	 
+		TrackedCourse in = new TrackedCourse(major,campus,term,course,section);
 
-	Gson gson = new Gson();
-	JsonElement json = gson.toJsonTree(in);
-
- 
+		Gson gson = new Gson();
+		JsonElement json = gson.toJsonTree(in);
 
 
-try {
 
-    FileOutputStream fos = openFileOutput("tracker",
-            Context.MODE_APPEND | Context.MODE_WORLD_READABLE);
-    fos.write(json.toString().getBytes());
-    fos.close();
+		try {
+		 File file = new File(getFilesDir(), "RUTracker.json");
+		 String contextA=getApplicationContext().getFilesDir().getAbsolutePath();
+	     RandomAccessFile raf = new RandomAccessFile(new File(getApplicationContext().getFilesDir(),"RUtracker.json"), "rw");
+	      	if(raf.length()==0){
+	      		raf.writeBytes("["+json.toString()+"]");
+	      	}
+	      	else{
+	          	raf.setLength(file.length()-1);
+	          	raf.seek(file.length());
+	          	raf.writeBytes(","+json.toString()+"]");
+	      	}
+	     raf.close();
 
+	    /*
+	     
+	     FileOutputStream fos= openFileOutput("tracker.json",
+	            Context.MODE_APPEND | Context.MODE_WORLD_READABLE);
+	   
+	    fos.write(json.toString().getBytes());
+	    fos.close();
+	    */
+	    
 
-    String storageState = Environment.getExternalStorageState();
+	/* Writes to sd card. Not usable on all devices due to varying file structures.
+	    String storageState = Environment.getExternalStorageState();
 
-    if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-    	//Properly format json table
-      File file = new File(getExternalFilesDir(null), "RUTracker.json");
-      	RandomAccessFile raf = new RandomAccessFile(file,"rw");
-      	if(raf.length()==0){
-      		raf.writeBytes("["+json.toString()+"]");
-      	}
-      	else{
-          	raf.setLength(file.length()-1);
-          	raf.seek(file.length());
-          	raf.writeBytes(","+json.toString()+"]");
-      	}
-      	raf.close();
-
-
-    }
-    Context context = getApplicationContext();
-    CharSequence text = "1 section added to Course Tracker";
-    int duration = Toast.LENGTH_SHORT;
-
-    Toast toast = Toast.makeText(context, text, duration);
-    toast.show();
-} catch (Exception e) {
-
-    e.printStackTrace();
-
-}
+	    if (storageState.equals(Environment.MEDIA_MOUNTED)) {
+	    	//Properly format json table
+	      File file = new File(getExternalFilesDir(null), "RUTracker.json");
+	      	RandomAccessFile raf = new RandomAccessFile(file,"rw");
+	      	raf.close();
 
 
-    }
+	    }
+	    */
+
+	} catch (Exception e) {
+
+	    e.printStackTrace();
+
+	}
+		}
 }

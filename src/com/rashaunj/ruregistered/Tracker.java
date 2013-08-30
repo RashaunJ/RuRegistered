@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Set;
 
 
 import parse.Course;
@@ -35,7 +38,7 @@ import android.widget.Toast;
 public class Tracker extends Service {
 	public ArrayList<TrackedCourse> open = new ArrayList<TrackedCourse>();
 	public ArrayList<TrackedCourse> closed = new ArrayList<TrackedCourse>();
-	public ArrayList<TrackedCourse> in = new ArrayList<TrackedCourse>();
+	Hashtable<String,ArrayList<TrackedCourse>> in = new Hashtable<String,ArrayList<TrackedCourse>>();
 	public String email;
     @Override
     public void onCreate() {
@@ -60,8 +63,9 @@ public class Tracker extends Service {
 				try {
 
 					create(in);
-					for(int i = 0;i<in.size();i++){
-						checkOpen(in.get(i));
+					Set<String> keySet = in.keySet();
+					for(String key: keySet){
+						checkOpen(in.get(key));
 					}
 					if(!open.isEmpty()){
 						Email.deploy(open);
@@ -85,14 +89,9 @@ public class Tracker extends Service {
 		return Service.START_STICKY;
 	  }
 		
-	public static ArrayList<TrackedCourse> create(ArrayList<TrackedCourse> in) throws IOException{
-		String storageState = Environment.getExternalStorageState();
-		Gson gson = new Gson();
-
-	    if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-	    	//File dir = Environment.getExternalStorageDirectory();
-	    	
-	        File file = new File(Environment.getExternalStorageDirectory()+"/Android/data/com.example.ruregistered/files/RUTracker.json");
+public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayList<TrackedCourse>> in) throws IOException{
+		Gson gson = new Gson();    	
+	        File file = new File(getFilesDir(), "RUTracker.json");
 	    	FileInputStream stream = new FileInputStream(file);
 	    	if( file.exists()){
 			BufferedReader br = new BufferedReader(
@@ -113,12 +112,17 @@ public class Tracker extends Service {
 	      	
 	      	for(JsonElement singleClass: userarray){
 	      		TrackedCourse singleCourse = gson.fromJson(singleClass, TrackedCourse.class);
-
-	      		in.add(singleCourse);
-
+	      		if(in.containsKey(singleCourse.major)){
+	      			in.get(singleCourse.major).add(singleCourse);
+	      		}
+	      		else{
+	      			ArrayList<TrackedCourse> push = new ArrayList<TrackedCourse>();
+	      			push.add(singleCourse);
+	      			in.put(singleCourse.major, push);
+	      		}
 	      	}
 	    }
-	      	}
+	      	
 	    
 	    return in;
 	    
@@ -132,12 +136,9 @@ public class Tracker extends Service {
 		return null;
 	}
 	public void update(ArrayList<TrackedCourse> in ) throws IOException{
-	    String storageState = Environment.getExternalStorageState();
 		Gson gson = new Gson();
-
-	    if (storageState.equals(Environment.MEDIA_MOUNTED)) {
 	    	//Properly format json table
-	      File file = new File(getExternalFilesDir(null), "RUTracker.json");
+	      File file = new File(getFilesDir(), "RUTracker.json");
 	      	RandomAccessFile raf = new RandomAccessFile(file,"rw");
 	      	raf.setLength(0);//Clears RUTracker.json
 	      	for(int i =0;i<in.size();i++){
@@ -154,28 +155,29 @@ public class Tracker extends Service {
 	      	}
 
 	      	closed.clear();
-
-	    }
+	    
 	}
-	
-	public void checkOpen(TrackedCourse in) throws Exception{
-		ArrayList<Course> curr = CourseWriter.create(in.major, in.term, in.campus);
-			for(int i= 0;i<curr.size();i++){
-				if(curr.get(i).title.equals(in.course)){//Oh god this is so inefficient I'm sorry
-				Section check[] =  curr.get(i).sections;
+
+
+	public void checkOpen(ArrayList<TrackedCourse> in) throws Exception{
+		ArrayList<Course> curr = CourseWriter.create(in.get(0).major, in.get(0).term, in.get(0).campus);
+		for(int k = 0;k<in.size();k++){
+		for(int i= 0;i<curr.size();i++){
+				if(curr.get(i).title.equals(in.get(k).course)){//Oh god this is so inefficient I'm sorry
+				Section[] check =  curr.get(i).sections;
 				for(int j = 0;j<check.length;j++){
-					if(check[j].index.equals(in.section)){
+					if(check[j].index.equals(in.get(k).section)){
 						if(check[j].openStatus==true)
-						open.add(in);
+						open.add(in.get(k));
 						else{
-							closed.add(in);
+							closed.add(in.get(k));
 						}
 					}
 				}
 				}
 			}
 
-
+		}
 	
 }
 
