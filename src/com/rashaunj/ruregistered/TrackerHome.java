@@ -18,6 +18,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import com.actionbarsherlock.view.Menu;
@@ -42,14 +43,6 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);	
-		Calendar calender = Calendar.getInstance();
-	       calender.setTimeInMillis(System.currentTimeMillis());
-	       calender.add(Calendar.SECOND, 9000);
-	       Log.d("Testing", "Calender Set time:"+calender.getTime());
-			Intent intent = new Intent(TrackerHome.this, Tracker.class);
-			PendingIntent pintent = PendingIntent.getService(getBaseContext(), 0, intent, 0);
-			AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-			alarm.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 9000*1000, pintent);		
 		Spinner campusspin = (Spinner) findViewById(R.id.campus);
 		final Spinner termspin = (Spinner) findViewById(R.id.term);
 		final Spinner majorspin = (Spinner) findViewById(R.id.majors);
@@ -57,6 +50,7 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
 		final EditText manual = (EditText) findViewById(R.id.coursecode);
 		ArrayList<String> majorList = new ArrayList<String>();
 		majorList = getAssetText(0);
+		startTracker();
 		final String campus[] = {"New Brunswick","Newark","Camden"};
 		String terms[] = {"Spring 2013","Summer 2013","Fall 2013"};
 		ArrayAdapter<String> campusAdapter = new ArrayAdapter<String>(this,
@@ -145,15 +139,15 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
         try {
         	if(arg2 == 0){
     	    	fileName = "nb.txt";
-    	    	extras.putString("campusCode","NB");
+    	    	extras.putString("campus","NB");
     	    }
     	    else if(arg2 ==1){
     	    	fileName = "nw.txt";
-    	    	extras.putString("campusCode","NK");
+    	    	extras.putString("campus","NK");
     	    }
     	    else if(arg2==2){
     	    	fileName = "ca.txt";
-    	    	extras.putString("campusCode","CM");
+    	    	extras.putString("campus","CM");
 
     	    }
             InputStream in = assetManager.open(fileName);
@@ -237,6 +231,18 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
         }
       return incoming;
     }
+	public void startTracker(){
+	   	final String PREFS_NAME = "MyPrefsFile";
+	   	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		Calendar calender = Calendar.getInstance();
+	    calender.setTimeInMillis(System.currentTimeMillis());
+	    calender.add(Calendar.SECOND, 30);
+	    Log.d("Testing", "Calender Set time:"+calender.getTime());
+		Intent intent = new Intent(TrackerHome.this, Tracker.class);
+		PendingIntent pintent = PendingIntent.getService(getBaseContext(), 0, intent, 0);
+		AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), settings.getInt("Interval",300000), pintent);
+	}
 }
 	
 

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,8 +29,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
-import android.os.Environment;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -45,12 +42,10 @@ public class Tracker extends Service {
 		Context context = getApplicationContext();
 		CharSequence text = "Attempting to start Course Tracker...";
 		int duration = Toast.LENGTH_SHORT;
-
+      	
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
-       	final String PREFS_NAME = "MyPrefsFile";
-       	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-       	settings.getString(email,"");
+ 
     }
 
 	  @Override
@@ -68,7 +63,10 @@ public class Tracker extends Service {
 						checkOpen(in.get(key));
 					}
 					if(!open.isEmpty()){
-						Email.deploy(open);
+						final String PREFS_NAME = "MyPrefsFile";
+					    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				       	String email = settings.getString("email","");
+						Email.deploy(open,email);
 						open.clear();
 						in.clear();
 						update(closed);
@@ -138,7 +136,7 @@ public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayL
 	public void update(ArrayList<TrackedCourse> in ) throws IOException{
 		Gson gson = new Gson();
 	    	//Properly format json table
-	      File file = new File(getFilesDir(), "RUTracker.json");
+	      File file = new File(getApplicationContext().getFilesDir() , "RUTracker.json");
 	      	RandomAccessFile raf = new RandomAccessFile(file,"rw");
 	      	raf.setLength(0);//Clears RUTracker.json
 	      	for(int i =0;i<in.size();i++){
@@ -163,7 +161,7 @@ public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayL
 		ArrayList<Course> curr = CourseWriter.create(in.get(0).major, in.get(0).term, in.get(0).campus);
 		for(int k = 0;k<in.size();k++){
 		for(int i= 0;i<curr.size();i++){
-				if(curr.get(i).title.equals(in.get(k).course)){//Oh god this is so inefficient I'm sorry
+				if(curr.get(i).title.equals(in.get(k).course)){
 				Section[] check =  curr.get(i).sections;
 				for(int j = 0;j<check.length;j++){
 					if(check[j].index.equals(in.get(k).section)){

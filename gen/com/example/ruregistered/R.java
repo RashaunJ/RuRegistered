@@ -940,16 +940,20 @@ containing a value of this type.
         public static final int section_item=0x7f030020;
         public static final int sherlock_spinner_dropdown_item=0x7f030021;
         public static final int sherlock_spinner_item=0x7f030022;
-        public static final int tracked_item=0x7f030023;
+        public static final int todelete=0x7f030023;
+        public static final int tracked_item=0x7f030024;
     }
     public static final class menu {
         public static final int about=0x7f0b0000;
-        public static final int activity_course_detail=0x7f0b0001;
-        public static final int activity_home=0x7f0b0002;
-        public static final int activity_list=0x7f0b0003;
-        public static final int launcher=0x7f0b0004;
-        public static final int track_list=0x7f0b0005;
-        public static final int tracked_list=0x7f0b0006;
+        public static final int activity_about1=0x7f0b0001;
+        public static final int activity_course_detail=0x7f0b0002;
+        public static final int activity_home=0x7f0b0003;
+        public static final int activity_list=0x7f0b0004;
+        public static final int activity_test=0x7f0b0005;
+        public static final int launcher=0x7f0b0006;
+        public static final int todelete=0x7f0b0007;
+        public static final int track_list=0x7f0b0008;
+        public static final int tracked_list=0x7f0b0009;
     }
     public static final class string {
         public static final int about_question=0x7f090025;
@@ -1002,6 +1006,7 @@ containing a value of this type.
         public static final int title_activity_course_detail=0x7f09000d;
         public static final int title_activity_home=0x7f090014;
         public static final int title_activity_launcher=0x7f09001d;
+        public static final int title_activity_test=0x7f090026;
         public static final int title_activity_track_list=0x7f090020;
         public static final int title_activity_tracked_list=0x7f09001f;
         public static final int track=0x7f09001b;

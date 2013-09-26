@@ -1,25 +1,19 @@
 package com.rashaunj.ruregistered;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.HashMap;
 import java.util.List;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.example.ruregistered.About;
 import com.example.ruregistered.R;
 
-import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -57,6 +51,7 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
         boolean firstTime = settings.getBoolean("firstTime", true);
         if (firstTime) { 
             final SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("interval", 300000);
             editor.putBoolean("firstTime", false);
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
             final EditText input = new EditText(this);
@@ -89,7 +84,7 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
             hm.put("item", Integer.toString(EntryImage[i]) );
             aList.add(hm);
         }
-        // Keys used in Hashmap
+
         String[] from = { "item","txt"};
 
 
@@ -117,7 +112,7 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
 			intent = new Intent(this,TrackList.class);
 			startActivity(intent);
 		}
-		else if(arg2==1){
+		else if(arg2==2){
 			intent = new Intent(this,TrackerHome.class);
 			startActivity(intent);
 		}

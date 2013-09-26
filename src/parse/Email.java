@@ -21,7 +21,7 @@ public class Email {
     private static final String SMTP_AUTH_PWD  = ""; //Until I implement serverside smtp will not commit with actual pass
 
 
-    public static void deploy(ArrayList<TrackedCourse> winners) throws Exception{
+    public static void deploy(ArrayList<TrackedCourse> winners, String email) throws Exception{
         Properties props = new Properties();
 
         props.put("mail.transport.protocol", "smtps");
@@ -39,7 +39,7 @@ public class Email {
         BodyPart header = new MimeBodyPart();
         header.setContent("Hello, RURegisteredBot here. The following classes have opened: ","text/plain"); 
         multipart.addBodyPart(header);
-        InternetAddress test = new InternetAddress("ruregisteredbot@gmail.com"); //Blaaaah
+        InternetAddress test = new InternetAddress("ruregisteredbot@gmail.com");
         message.setSender(test);
         for(int i =0;i<winners.size();i++){
         	BodyPart x =new MimeBodyPart();
@@ -55,7 +55,7 @@ public class Email {
         message.setContent(multipart);
 
         message.addRecipient(Message.RecipientType.TO,
-             new InternetAddress("raltcc@gmail.com"));
+             new InternetAddress(email));
 
         transport.connect
           (SMTP_HOST_NAME, SMTP_HOST_PORT, SMTP_AUTH_USER, SMTP_AUTH_PWD);

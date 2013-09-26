@@ -1,7 +1,7 @@
 package com.rashaunj.ruregistered;
 
 import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -21,11 +21,8 @@ import parse.Section;
 import parse.TrackedCourse;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
@@ -83,7 +80,7 @@ Tracker push = new Tracker();
 			Bundle extras = getIntent().getExtras();
 			try {
 
-				CourseList.create(mcourse,extras.getString("major"),extras.getString("term"),extras.getString("campusCode"));			
+				CourseList.create(mcourse,extras.getString("major"),extras.getString("term"),extras.getString("campus"));			
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -127,11 +124,10 @@ Tracker push = new Tracker();
 			 						 String major = in.getString("major");
 			 						 String term = in.getString("term");
 			 						 String campus = in.getString("campus");
-			 						 String level = "U";
 			 						 String course = adapter.getItem(position).title;
 			 						for (int i = 0;i<allsections.length;i++){
 			 							 String section = allsections[i].index;
-			 						     write(major,campus,term,level,course,section);
+			 						     write(major,campus,term,course,section);
 			 						     count++;
 			 						}
 			 					    CharSequence text = count + " sections added to Course Tracker";
@@ -172,7 +168,7 @@ Tracker push = new Tracker();
 		Bundle i = getIntent().getExtras();
 		String major = i.getString("major");
 		String term = i.getString("term");
-		String campus = i.getString("campusCode");
+		String campus = i.getString("campus");
 		String course = adapter.getItem(arg2).title;
 		Intent intent = new Intent(this,CourseDetail.class);
 		intent.putExtra("SecID", arg2);
@@ -195,12 +191,13 @@ Tracker push = new Tracker();
 	@Override
 	public void onResume(){
 	    super.onResume();
-	    mcourse.clear();
+	 //   mcourse.clear();
 	    adapter.notifyDataSetChanged();
-		LoadData task = new LoadData();
-		task.execute();
+		//LoadData task = new LoadData();
+		//task.execute();
 	}
-	public void write(String major,String campus, String term, String level, String course, String section) {
+	
+	public void write(String major,String campus, String term, String course, String section) {
 	   	 
 		TrackedCourse in = new TrackedCourse(major,campus,term,course,section);
 
@@ -211,8 +208,7 @@ Tracker push = new Tracker();
 
 		try {
 		 File file = new File(getFilesDir(), "RUTracker.json");
-		 String contextA=getApplicationContext().getFilesDir().getAbsolutePath();
-	     RandomAccessFile raf = new RandomAccessFile(new File(getApplicationContext().getFilesDir(),"RUtracker.json"), "rw");
+	     RandomAccessFile raf = new RandomAccessFile(new File(getApplicationContext().getFilesDir(),"RUTracker.json"), "rw");
 	      	if(raf.length()==0){
 	      		raf.writeBytes("["+json.toString()+"]");
 	      	}

@@ -1,8 +1,18 @@
 package com.rashaunj.ruregistered;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Set;
 
+import parse.Course;
+import parse.CourseList;
 import parse.Section;
 import parse.TrackedCourse;
 
@@ -11,26 +21,26 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.ruregistered.R;
-import com.example.ruregistered.R.drawable;
-import com.example.ruregistered.R.id;
-import com.example.ruregistered.R.layout;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class TrackList extends SherlockActivity {
-	ArrayList<TrackedCourse> list = new ArrayList<TrackedCourse>();
-
+	public ArrayList<TrackedCourse> open = new ArrayList<TrackedCourse>();
+	public ArrayList<TrackedCourse> closed = new ArrayList<TrackedCourse>();
+	Hashtable<String,ArrayList<TrackedCourse>> in = new Hashtable<String,ArrayList<TrackedCourse>>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,8 +71,8 @@ public class TrackList extends SherlockActivity {
 		    }; 
 	     protected void onPostExecute(Void result) {
 	    	 adapter = new TrackedCourseListAdapter(TrackList.this,
-		                R.layout.tracked_item, list);
-	    	 listview.setAdapter(adapter);
+		                R.layout.tracked_item, closed);
+	    	 	listview.setAdapter(adapter);
 			    adapter.notifyDataSetChanged();
 			    ActionBar bar = getSupportActionBar();
 				bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient));
@@ -74,7 +84,6 @@ public class TrackList extends SherlockActivity {
 				     public boolean onItemLongClick(final AdapterView<?> parent, View v, final int position, long id) {
 				    	 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				 				TrackList.this);
-				     	final int pos = position;
 
 				 			alertDialogBuilder.setTitle("Tracker");
 				  
@@ -82,12 +91,11 @@ public class TrackList extends SherlockActivity {
 				 				.setMessage("Would you like to untrack this course")
 				 				.setCancelable(false)
 				 				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-				 					Bundle in = getIntent().getExtras();
 				 					public void onClick(DialogInterface dialog,int id) {
 				 						Tracker track = new Tracker();
-				 						list.remove(position);
+				 						closed.remove(position);
 				 						try {
-											track.update(list);
+											track.update(closed);
 											adapter.notifyDataSetChanged();
 										} catch (IOException e) {
 											// TODO Auto-generated catch block
@@ -116,17 +124,79 @@ public class TrackList extends SherlockActivity {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			/*
-			try {
-				Tracker.create(list);
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		try {
+			create(in);
+			Set<String> keySet = in.keySet();
+			for(String key: keySet){
+				getClosed(in.get(key),closed);
 			}
-			*/
-			return null;
+		} catch (IOException e) {			
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 		}
 	 }
+	 public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayList<TrackedCourse>> in) throws IOException{
+			Gson gson = new Gson();    	
+		        File file = new File(getFilesDir(), "RUTracker.json");
+		    	FileInputStream stream = new FileInputStream(file);
+		    	if( file.exists()){
+				BufferedReader br = new BufferedReader(
+						new InputStreamReader(stream));
+				
+		      	StringBuilder jsonText = new StringBuilder();
+		      	String curr = null;
+		      	while ((curr = br.readLine()) != null){	
+		      	jsonText.append(curr);
+		      	}
+		      	br.close();
+		      	InputStream jsonStream = new ByteArrayInputStream(jsonText.toString().getBytes());
+		      	//Json source file
+		      	JsonReader reader = new JsonReader(new InputStreamReader(jsonStream));//Converts String to type InputStream
+		      	JsonParser parser = new JsonParser();           
+		      	JsonArray userarray= parser.parse(reader).getAsJsonArray();
+		      	
+		      	
+		      	for(JsonElement singleClass: userarray){
+		      		TrackedCourse singleCourse = gson.fromJson(singleClass, TrackedCourse.class);
+		      		if(in.containsKey(singleCourse.major)){
+		      			in.get(singleCourse.major).add(singleCourse);
+		      		}
+		      		else{
+		      			ArrayList<TrackedCourse> push = new ArrayList<TrackedCourse>();
+		      			push.add(singleCourse);
+		      			in.put(singleCourse.major, push);
+		      		}
+		      	}
+		    }
+		      	
+		    
+		    return in;
+		    
+
+		}
+
+		public ArrayList<TrackedCourse> getClosed(ArrayList<TrackedCourse> in, ArrayList<TrackedCourse> closed) throws Exception{
+			ArrayList<Course> curr = new ArrayList<Course>();
+			CourseList.create(curr,in.get(0).major, in.get(0).term, in.get(0).campus);
+			for(TrackedCourse k: in){
+			for(Course i: curr){
+					if(i.title.equals(k.course)){
+					Section[] check =  i.sections;
+					for(Section j: check){
+						if(j.index.equals(k.section)){
+							if(j.openStatus==false){
+							closed.add(k);
+							}
+					}
+					}
+				}
+
+			}
+			}
+		return closed;
+	}
 
 }

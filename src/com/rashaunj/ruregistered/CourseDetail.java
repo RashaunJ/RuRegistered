@@ -3,7 +3,6 @@ package com.rashaunj.ruregistered;
 
 
 import java.io.File;
-import java.io.FileOutputStream;
 
 import java.io.RandomAccessFile;
 
@@ -25,7 +24,7 @@ import android.content.Context;
 
 
 import android.os.Bundle;
-import android.os.Environment;
+
 
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -143,11 +142,10 @@ public class CourseDetail extends SherlockFragmentActivity {
 			 String major = i.getString("major");
 			 String term = i.getString("term");
 			 String campus = i.getString("campus");
-			 String level = "U";
 			 String course = i.getString("course");
 			 String section = in.index;
 
-		     write(major,campus,term,level,course,section);
+		     write(major,campus,term,course,section);
 		     Context context = getApplicationContext();
 		     CharSequence text = "1 section added to Course Tracker";
 		     int duration = Toast.LENGTH_SHORT;
@@ -165,7 +163,7 @@ public class CourseDetail extends SherlockFragmentActivity {
     /**
      * Writes selected course(s) to json.    	 
      */
-	public void write(String major,String campus, String term, String level, String course, String section) {
+	public void write(String major,String campus, String term, String course, String section) {
 	   	 
 		TrackedCourse in = new TrackedCourse(major,campus,term,course,section);
 
@@ -176,8 +174,8 @@ public class CourseDetail extends SherlockFragmentActivity {
 
 		try {
 		 File file = new File(getFilesDir(), "RUTracker.json");
-		 String contextA=getApplicationContext().getFilesDir().getAbsolutePath();
-	     RandomAccessFile raf = new RandomAccessFile(new File(getApplicationContext().getFilesDir(),"RUtracker.json"), "rw");
+		// String contextA=getApplicationContext().getFilesDir().getAbsolutePath(); Testing file directory output
+	     RandomAccessFile raf = new RandomAccessFile(new File(getApplicationContext().getFilesDir(),"RUTracker.json"), "rw");
 	      	if(raf.length()==0){
 	      		raf.writeBytes("["+json.toString()+"]");
 	      	}
