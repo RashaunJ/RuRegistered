@@ -5,6 +5,7 @@ RuRegistered is an Android application which allows for tracking of the open/clo
 
 ##Overview
 RuRegistered uses JSON requests to parse relevant course information. Simple.
+Stored courses are saved in the phones internal storage as a JSON file named: RUTracker.json
 
 ##Object Structure
 
