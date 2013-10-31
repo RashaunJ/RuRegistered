@@ -1,0 +1,73 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/ScrollView01"
+	tools:context=".TrackerHome"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
+
+        <TextView
+            android:id="@+id/settings_emailtext"
+            android:text="@string/settings_emailchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:textIsSelectable="true"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <EditText
+            android:id="@+id/settings_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textWebEmailAddress" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/settings_trackerstatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_trackeronoff"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ToggleButton
+                android:id="@+id/settings_trackertoggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ToggleButton" />
+
+        </LinearLayout>
+
+        <CheckedTextView
+            android:id="@+id/checkedTextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_trackeronoff"
+            android:checked="true" />
+
+        <TextView
+            android:id="@+id/settings_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_intervalchange"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Spinner
+            android:id="@+id/settings_intervalspin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckedTextView
+            android:id="@+id/settings_wipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_wipeall"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:clickable="true" />
+
+    </LinearLayout>

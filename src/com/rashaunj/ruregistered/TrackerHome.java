@@ -21,9 +21,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
 
 import android.util.Log;
 import android.view.View;
@@ -50,9 +52,11 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
 		final EditText manual = (EditText) findViewById(R.id.coursecode);
 		ArrayList<String> majorList = new ArrayList<String>();
 		majorList = getAssetText(0);
-		startTracker();
+		
+	    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
 		final String campus[] = {"New Brunswick","Newark","Camden"};
-		String terms[] = {"Spring 2013","Summer 2013","Fall 2013"};
+		String terms[] = {"Winter 2013","Spring 2014"};
 		ArrayAdapter<String> campusAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, campus);
 			campusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -88,13 +92,10 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
             	}
         		
             	if(termcode==0){
-            		term = "12013";
+            		term = "02014";
             	}
             	else if(termcode==1){
-            		term = "72013";            	
-            	}
-            	else if(termcode==2){
-            		term = "92013";
+            		term = "12014";            	
             	}
             	extras.putString("term", term);
         		extras.putString("major",majorselection);
@@ -186,13 +187,10 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
         try {
         	
 			ArrayList<String> majorList = Majors.localParse(0);
-      	//majorspin = (Spinner) findViewById(R.id.majors);
       	ArrayAdapter<String> majorAdapter = new ArrayAdapter<String>(TrackerHome.this,
    		android.R.layout.simple_spinner_item, majorList);
           majorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			//majorspin.setAdapter(majorAdapter);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -231,18 +229,6 @@ public class TrackerHome extends SherlockActivity implements OnItemSelectedListe
         }
       return incoming;
     }
-	public void startTracker(){
-	   	final String PREFS_NAME = "MyPrefsFile";
-	   	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		Calendar calender = Calendar.getInstance();
-	    calender.setTimeInMillis(System.currentTimeMillis());
-	    calender.add(Calendar.SECOND, 30);
-	    Log.d("Testing", "Calender Set time:"+calender.getTime());
-		Intent intent = new Intent(TrackerHome.this, Tracker.class);
-		PendingIntent pintent = PendingIntent.getService(getBaseContext(), 0, intent, 0);
-		AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), settings.getInt("Interval",300000), pintent);
-	}
 }
-	
+
 

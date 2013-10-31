@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
@@ -20,7 +21,7 @@ import parse.TrackedCourse;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -92,15 +93,14 @@ public class TrackList extends SherlockActivity {
 				 				.setCancelable(false)
 				 				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 				 					public void onClick(DialogInterface dialog,int id) {
-				 						Tracker track = new Tracker();
 				 						closed.remove(position);
 				 						try {
-											track.update(closed);
-											adapter.notifyDataSetChanged();
+											update(closed);
 										} catch (IOException e) {
 											// TODO Auto-generated catch block
 											e.printStackTrace();
 										}
+				 						adapter.notifyDataSetChanged();
 				 						
 
 				 					}
@@ -198,5 +198,28 @@ public class TrackList extends SherlockActivity {
 			}
 		return closed;
 	}
+		public void update(ArrayList<TrackedCourse> in ) throws IOException{
+			Gson gson = new Gson();
+		    	//Properly format json table
+		      File file = new File(getApplicationContext().getFilesDir() , "RUTracker.json");
+		      	RandomAccessFile raf = new RandomAccessFile(file,"rw");
+		      	raf.setLength(0);//Clears RUTracker.json
+		      	for(int i =0;i<in.size();i++){
+		      		JsonElement json = gson.toJsonTree(in.get(i));
+			      	if(raf.length()==0){
+			      		raf.writeBytes("["+json.toString()+"]");
+			      	}
+			      	else{
+			          	raf.setLength(file.length()-1);
+			          	raf.seek(file.length());
+			          	raf.writeBytes(","+json.toString()+"]");
+			      	}
+			      	raf.close();
+		      	}
+
+		      	closed.clear();
+		    
+		}
+
 
 }

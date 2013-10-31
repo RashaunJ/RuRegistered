@@ -11,7 +11,7 @@ import org.json.JSONException;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -191,10 +191,10 @@ Tracker push = new Tracker();
 	@Override
 	public void onResume(){
 	    super.onResume();
-	 //   mcourse.clear();
+	    mcourse.clear();
 	    adapter.notifyDataSetChanged();
-		//LoadData task = new LoadData();
-		//task.execute();
+		LoadData task = new LoadData();
+		task.execute();
 	}
 	
 	public void write(String major,String campus, String term, String course, String section) {

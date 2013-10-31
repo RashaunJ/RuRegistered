@@ -13,7 +13,7 @@ import parse.Course;
 import parse.Section;
 import parse.TrackedCourse;
 import com.actionbarsherlock.view.*;
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 

@@ -16,7 +16,7 @@ public class Majors {
 		new InputStreamReader(baseUrl.openStream()));
 		String input;
 		while(in.readLine()!=null){
-			input = in.readLine();//Bad code practice. Fix so that it doesn't read blindly.
+			input = in.readLine();
 			if(input.contains("<option value")){
 				input = input.trim();
 				input=input.replaceAll("<(.|\n)*?>","");//Remove html tagging

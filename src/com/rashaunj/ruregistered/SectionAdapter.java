@@ -1,7 +1,7 @@
 package com.rashaunj.ruregistered;
 
 
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
 
 import parse.Section;
 

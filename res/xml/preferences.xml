@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+  <CheckBoxPreference
+        android:key="trackerstate"
+        android:title="@string/settings_trackeronoff"
+        android:summary="@string/settings_tracker_sub"
+        android:defaultValue="true" />
+          <ListPreference 
+            android:key="interval"
+            android:title="Tracking Rate"
+            android:summary="@string/settings_rate_sub"
+            android:entries="@array/updateInterval"
+            android:entryValues="@array/updateIntervalValues"/>   
+  <EditTextPreference android:key="email" android:title="Currently Stored Email" android:summary="Will be used to email you when a course opens"/>
+  
+	
+
+</PreferenceScreen>

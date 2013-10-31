@@ -30,5 +30,13 @@
     <string name="about_year">2013 RaShaun Jones</string>
     <string name="about_question">Questions? Want to report an issue? Email raltcc@gmail.com</string>
     <string name="title_activity_test">Test</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="settings_emailchange">Change the currently saved email address.</string>
+    <string name="settings_intervalchange">Change tracker check rate</string>
+    <string name="settings_wipeall">Wipe saved courses?</string>
+    <string name="settings_trackeronoff">Tracker On/Off:</string>
+    <string name="settings_email_sub">Will be used to email you when a class opens</string>
+    <string name="settings_tracker_sub">Uncheck only if you no longer want to track courses</string>
+    <string name="settings_rate_sub">Determines how often the tracker will run. Set higher interval for lower data usage.</string>
 
 </resources>

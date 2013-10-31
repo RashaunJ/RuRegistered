@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class Tracker extends Service {
@@ -40,11 +41,11 @@ public class Tracker extends Service {
     @Override
     public void onCreate() {
 		Context context = getApplicationContext();
-		CharSequence text = "Attempting to start Course Tracker...";
-		int duration = Toast.LENGTH_SHORT;
+		//CharSequence text = "Attempting to start Course Tracker...";
+		//int duration = Toast.LENGTH_SHORT;
       	
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.show();
+		//Toast toast = Toast.makeText(context, text, duration);
+		//toast.show();
  
     }
 
@@ -63,8 +64,7 @@ public class Tracker extends Service {
 						checkOpen(in.get(key));
 					}
 					if(!open.isEmpty()){
-						final String PREFS_NAME = "MyPrefsFile";
-					    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+					    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 				       	String email = settings.getString("email","");
 						Email.deploy(open,email);
 						open.clear();
@@ -107,7 +107,6 @@ public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayL
 	      	JsonParser parser = new JsonParser();           
 	      	JsonArray userarray= parser.parse(reader).getAsJsonArray();
 	      	
-	      	
 	      	for(JsonElement singleClass: userarray){
 	      		TrackedCourse singleCourse = gson.fromJson(singleClass, TrackedCourse.class);
 	      		if(in.containsKey(singleCourse.major)){
@@ -120,11 +119,9 @@ public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayL
 	      		}
 	      	}
 	    }
-	      	
-	    
+	      		    
 	    return in;
 	    
-
 	}
 
 
@@ -136,7 +133,7 @@ public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayL
 	public void update(ArrayList<TrackedCourse> in ) throws IOException{
 		Gson gson = new Gson();
 	    	//Properly format json table
-	      File file = new File(getApplicationContext().getFilesDir() , "RUTracker.json");
+	      File file = new File(Tracker.this.getFilesDir() , "RUTracker.json");
 	      	RandomAccessFile raf = new RandomAccessFile(file,"rw");
 	      	raf.setLength(0);//Clears RUTracker.json
 	      	for(int i =0;i<in.size();i++){

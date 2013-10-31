@@ -18,7 +18,7 @@ public class Email {
     private static final String SMTP_HOST_NAME = "smtp.gmail.com";
     private static final int SMTP_HOST_PORT = 465;
     private static final String SMTP_AUTH_USER = "ruregisteredbot@gmail.com";
-    private static final String SMTP_AUTH_PWD  = ""; //Until I implement serverside smtp will not commit with actual pass
+    private static final String SMTP_AUTH_PWD  = "";
 
 
     public static void deploy(ArrayList<TrackedCourse> winners, String email) throws Exception{

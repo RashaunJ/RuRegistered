@@ -2,7 +2,7 @@ package com.rashaunj.ruregistered;
 
 import java.util.ArrayList;
 
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
 
 import parse.Course;
 import android.app.Activity;

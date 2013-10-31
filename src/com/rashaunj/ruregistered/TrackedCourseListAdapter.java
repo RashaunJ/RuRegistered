@@ -3,7 +3,7 @@ package com.rashaunj.ruregistered;
 
 import java.util.ArrayList;
 
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
 
 import parse.TrackedCourse;
 import android.app.Activity;

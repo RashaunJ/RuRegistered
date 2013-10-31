@@ -2,18 +2,25 @@ package com.rashaunj.ruregistered;
 
 import java.util.ArrayList;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.example.ruregistered.R;
+import com.rashaunj.ruregistered.R;
+import com.rashaunj.ruregistered.List.LoadData;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -23,7 +30,6 @@ import android.widget.SimpleAdapter;
 
 public class Launcher extends SherlockActivity implements OnItemClickListener {
 
-  // Array of strings storing country names
     String[] EntryText = new String[] {
             "Add New Course",
             "View Tracked Courses",
@@ -31,8 +37,7 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
             "About"
             
     };
-
-    // Array of integers points to images stored in /res/drawable-ldpi/
+    AlarmManager alarm;
     int[] EntryImage = new int[]{
                 R.drawable.add,
                 R.drawable.track,
@@ -40,18 +45,18 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
                 R.drawable.about
                
     };
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_launcher);
-       
-   	final String PREFS_NAME = "MyPrefsFile";
-   	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	   alarm= (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+      	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean firstTime = settings.getBoolean("firstTime", true);
         if (firstTime) { 
             final SharedPreferences.Editor editor = settings.edit();
-            editor.putInt("interval", 300000);
+            editor.putString("interval", "300000");
+            editor.putBoolean("trackerstate",true);
             editor.putBoolean("firstTime", false);
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
             final EditText input = new EditText(this);
@@ -98,8 +103,22 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
         // Setting an adapter containing images to the gridview
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(Launcher.this);
-        
+
     }
+	@Override
+	public void onResume(){
+	    super.onResume();
+	   	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+	   	Boolean check = settings.getBoolean("trackerstate", false);
+	   	if(check==true){
+			startTracker();
+	   	}
+	   	else{
+	   		Intent intent = new Intent(Launcher.this, Tracker.class);
+			PendingIntent pintent = PendingIntent.getService(getBaseContext(), 0, intent, 0);
+	   		alarm.cancel(pintent);
+	   	}
+	}
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
@@ -113,7 +132,7 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
 			startActivity(intent);
 		}
 		else if(arg2==2){
-			intent = new Intent(this,TrackerHome.class);
+			intent = new Intent(this,Settings.class);
 			startActivity(intent);
 		}
 		else if(arg2==3){
@@ -122,4 +141,18 @@ public class Launcher extends SherlockActivity implements OnItemClickListener {
 		}
 
 	}
+	public void startTracker(){
+	   	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		Calendar calender = Calendar.getInstance();
+	    calender.setTimeInMillis(System.currentTimeMillis());
+	    calender.add(Calendar.SECOND, 30);
+	    Log.d("Testing", "Calender Set time:"+calender.getTime());
+		Intent intent = new Intent(Launcher.this, Tracker.class);
+		PendingIntent pintent = PendingIntent.getService(getBaseContext(), 0, intent, 0);
+	    //alarm= (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+		//Necessary since Android ListPreference does not parse integer-arrays in XML
+		int interval = Integer.parseInt(settings.getString("interval", "300000"));		
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), interval, pintent);
+	}
 }
+	
