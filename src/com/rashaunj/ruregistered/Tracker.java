@@ -31,7 +31,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
+
 
 public class Tracker extends Service {
 	public ArrayList<TrackedCourse> open = new ArrayList<TrackedCourse>();
@@ -40,7 +40,6 @@ public class Tracker extends Service {
 	public String email;
     @Override
     public void onCreate() {
-		Context context = getApplicationContext();
 		//CharSequence text = "Attempting to start Course Tracker...";
 		//int duration = Toast.LENGTH_SHORT;
       	
@@ -66,7 +65,7 @@ public class Tracker extends Service {
 					if(!open.isEmpty()){
 					    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 				       	String email = settings.getString("email","");
-						Email.deploy(open,email);
+						Email.MandrillDeploy(open,email);
 						open.clear();
 						in.clear();
 						update(closed);

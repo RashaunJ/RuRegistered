@@ -187,9 +187,8 @@ public class TrackList extends SherlockActivity {
 					Section[] check =  i.sections;
 					for(Section j: check){
 						if(j.index.equals(k.section)){
-							if(j.openStatus==false){
 							closed.add(k);
-							}
+							
 					}
 					}
 				}
