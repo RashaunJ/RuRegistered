@@ -161,7 +161,7 @@ public Hashtable<String,ArrayList<TrackedCourse>> create(Hashtable<String,ArrayL
 				Section[] check =  curr.get(i).sections;
 				for(int j = 0;j<check.length;j++){
 					if(check[j].index.equals(in.get(k).section)){
-						if(check[j].openStatus==true)
+						if(check[j].openStatus==true&&!open.contains(check[j]))
 						open.add(in.get(k));
 						else{
 							closed.add(in.get(k));
