@@ -216,7 +216,7 @@ public class TrackList extends SherlockActivity {
 			      	raf.close();
 		      	}
 
-		      	closed.clear();
+		      	//closed.clear();
 		    
 		}
 

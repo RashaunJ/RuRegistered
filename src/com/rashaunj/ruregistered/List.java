@@ -77,6 +77,7 @@ Tracker push = new Tracker();
 	    @Override
 	    protected Void doInBackground(Void... params)
 	    {   
+	    	mcourse.clear();
 			Bundle extras = getIntent().getExtras();
 			try {
 
@@ -187,7 +188,7 @@ Tracker push = new Tracker();
 	    }
 	    return false;
 	}
-
+	/*
 	@Override
 	public void onResume(){
 	    super.onResume();
@@ -196,6 +197,7 @@ Tracker push = new Tracker();
 		LoadData task = new LoadData();
 		task.execute();
 	}
+	*/
 	
 	public void write(String major,String campus, String term, String course, String section) {
 	   	 

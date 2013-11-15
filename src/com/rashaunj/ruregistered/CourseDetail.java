@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 
 
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import android.widget.TextView;
@@ -99,63 +101,39 @@ public class CourseDetail extends SherlockFragmentActivity {
 	    return false;
 	}
 	private void Popup(final Section in, String cred) {
-		 String index = in.index;
-		 String c = cred;
-		 String allCampuses = Section.getCampuses(in);
-		 String allTimes = Section.getMeetingTimes(in);
-		 AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
-		 helpBuilder.setTitle("Full Course Description");
-		 helpBuilder.setMessage("Section: " +index);
-		 
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        String index = in.index;
+		String allCampuses = Section.getCampuses(in);
+		String allTimes = Section.getMeetingTimes(in);				
+        alert.setTitle("Full Course Description");
+        alert.setMessage("Section: " +index + "\n" + "Credits: "+cred+"\n"+allCampuses +"\n" +allTimes +"\n");
+        alert.setPositiveButton("Track Course", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+             String major = i.getString("major");
+   			 String term = i.getString("term");
+   			 String campus = i.getString("campus");
+   			 String course = i.getString("course");
+   			 String section = in.index;
 
-		 LayoutInflater inflater = getLayoutInflater();
-		 View checkboxLayout = inflater.inflate(R.layout.course_popup, null);
-		 helpBuilder.setView(checkboxLayout);
-		 final AlertDialog helpDialog = helpBuilder.create();
-		 helpDialog.show();
-		 TextView credits = (TextView) checkboxLayout.findViewById(R.id.detailCredits);
-		 TextView campus = (TextView) checkboxLayout.findViewById(R.id.detailCampus);
-		 TextView meetingTimes = (TextView) checkboxLayout.findViewById(R.id.detailMeetLabel);
-		 credits.setText("Credits: " +c);
-		 campus.setText(allCampuses);
-		 meetingTimes.setText(allTimes);
-		 Button cancel = (Button)checkboxLayout.findViewById(R.id.cancel);
-		 cancel.setOnClickListener(new View.OnClickListener() {
-		 @Override
-		 public void onClick(View v) {
-		     // TODO Auto-generated method stub
-		     helpDialog.cancel();
-		     
-		 }});
-		 
-		 cancel.setOnClickListener(new View.OnClickListener() {
-		 @Override
-		 public void onClick(View v) {
-		     // TODO Auto-generated method stub
-		     helpDialog.cancel();
-		     
-		 }});
-		 Button track = (Button)checkboxLayout.findViewById(R.id.track);
-		 track.setOnClickListener(new View.OnClickListener() {
-		 @Override		 
-		 public void onClick(View v) {
-			 String major = i.getString("major");
-			 String term = i.getString("term");
-			 String campus = i.getString("campus");
-			 String course = i.getString("course");
-			 String section = in.index;
+   		     write(major,campus,term,course,section);
+   		     Context context = getApplicationContext();
+   		     CharSequence text = "1 section added to Course Tracker";
+   		     int duration = Toast.LENGTH_SHORT;
 
-		     write(major,campus,term,course,section);
-		     Context context = getApplicationContext();
-		     CharSequence text = "1 section added to Course Tracker";
-		     int duration = Toast.LENGTH_SHORT;
+   		     Toast toast = Toast.makeText(context, text, duration);
+   		     toast.show();
+   		     dialog.cancel();
 
-		     Toast toast = Toast.makeText(context, text, duration);
-		     toast.show();
-		     helpDialog.cancel();
-		     
-		 }});
+            }
+        });
 
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+        alert.show(); 
+        
 	}
 	
 

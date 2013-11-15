@@ -40,12 +40,6 @@ public class Tracker extends Service {
 	public String email;
     @Override
     public void onCreate() {
-		//CharSequence text = "Attempting to start Course Tracker...";
-		//int duration = Toast.LENGTH_SHORT;
-      	
-		//Toast toast = Toast.makeText(context, text, duration);
-		//toast.show();
- 
     }
 
 	  @Override

@@ -23,8 +23,11 @@ public class Section {
 public static String getCampuses(Section in){
 
 	String Campuses = "Campuses: ";
-
+		if(in.meetingTimes[0].campusName==null){
+			return Campuses;
+		}
 	for(int i =0;i<in.meetingTimes.length;i++){
+		
 		if(!Campuses.contains(in.meetingTimes[i].campusName)){//Remove redundant entries due to recitation etc.
 		Campuses = Campuses.concat(in.meetingTimes[i].campusName+ ",");
 		}
@@ -40,21 +43,24 @@ public static String getCampuses(Section in){
  */
 public static String getMeetingTimes(Section in){
 	String Times = "Meeting Times: ";
-
+	
 	for(int i =0;i<in.meetingTimes.length;i++){
 		String start = in.meetingTimes[i].startTime;
 		String end = in.meetingTimes[i].endTime;
 		String day = in.meetingTimes[i].meetingDay;
-		if(in.meetingTimes[i].pmCode.equals("A")){// Morning/Night class
-		start=start.substring(0,2)+":"+start.substring(2,start.length());
-		end=end.substring(0,2)+":"+end.substring(2,end.length());
-		Times = Times.concat("\n"+day+ " "+start+"AM"+ "-"+end+" ");
+		if(in.meetingTimes[i].pmCode!=null||in.meetingTimes[i].startTime!=null){
+			if(in.meetingTimes[i].pmCode.equals("A")){// Morning/Night class
+				start=start.substring(0,2)+":"+start.substring(2,start.length());
+				end=end.substring(0,2)+":"+end.substring(2,end.length());
+				Times = Times.concat("\n"+day+ " "+start+"AM"+ "-"+end+" ");
+				}
+				else{
+					start=start.substring(0,2)+":"+start.substring(2,start.length());
+					end=end.substring(0,2)+":"+end.substring(2,end.length());
+					Times = Times.concat("\n"+day+" " +start+"PM"+ "-"+end+" ");
+				}
 		}
-		else{
-			start=start.substring(0,2)+":"+start.substring(2,start.length());
-			end=end.substring(0,2)+":"+end.substring(2,end.length());
-			Times = Times.concat("\n"+day+" " +start+"PM"+ "-"+end+" ");
-		}
+
 	}
 	return Times;
 }
