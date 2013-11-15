@@ -3,6 +3,8 @@ RURegistered
 
 RuRegistered is an Android application which allows for tracking of the open/close status of courses for Rutgers.
 
+Originally inspired by Course Sniper, it intends to become a feature-rich Android alternative.
+
 ##Overview
 RuRegistered uses JSON requests to parse relevant course information. Simple.
 
